@@ -2,9 +2,6 @@ package com.ychost.codeoffer;
 
 import com.ychost.codeoffer.model.TreeNode;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * 剑指Offer 面试题 7，重建二叉树
  * @author ychost
@@ -21,20 +18,21 @@ public class Q7RebuildBinTree {
         if(pre == null || in == null || pre.length ==0 || in.length ==0 || pre.length != in.length){
             return null;
         }
-        return buildTree(pre,in,0,0,in.length-1);
+        return build(pre,in,0,0,in.length-1);
     }
 
 
-    public TreeNode buildTree(int[] pre,int[] in,int preStart,int inStart,int inEnd){
+    public TreeNode build(int[] pre, int[] in, int preStart, int inStart, int inEnd){
         if(inEnd< 0||inStart>inEnd ||preStart >= pre.length){
             return null;
         }
         TreeNode root = new TreeNode(pre[preStart]);
         int valIndex = indexOf(in, root.val,0,inEnd);
-        root.left = buildTree(pre,in,preStart+1,inStart,valIndex -1);
-        root.right = buildTree(pre,in,preStart+valIndex - inStart +1,valIndex+1,inEnd);
+        root.left = build(pre,in,preStart+1,inStart,valIndex -1);
+        root.right = build(pre,in,preStart+valIndex - inStart +1,valIndex+1,inEnd);
         return root;
     }
+
 
 
     int indexOf(int[] array,int target,int start,int end){
