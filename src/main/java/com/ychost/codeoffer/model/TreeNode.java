@@ -2,8 +2,7 @@ package com.ychost.codeoffer.model;
 
 import sun.reflect.generics.tree.Tree;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ychost
@@ -21,6 +20,24 @@ public class TreeNode {
                  map.put(i,new TreeNode(array[i]));
             }
             return map;
+      }
+
+      public static TreeNode create(Integer[] array){
+          TreeNode root = new TreeNode(array[0]);
+          Queue<TreeNode> queue = new LinkedList<>();
+          queue.offer(root);
+          for (int i = 1; i < array.length; i+=2) {
+              TreeNode father = queue.poll();
+              if(array[i] != null){
+                  father.left = new TreeNode(array[i]);
+                  queue.offer(father.left);
+              }
+              if(i+1 < array.length && array[i+1] != null){
+                  father.right = new TreeNode(array[i+1]);
+                  queue.offer(father.right);
+              }
+          }
+          return root;
       }
 
       public static void setSubTree(Map<Integer,TreeNode> map,Integer father,Integer left,Integer right){
@@ -45,4 +62,29 @@ public class TreeNode {
           }
       }
 
+    @Override
+    public String toString() {
+      List<Integer> list = new ArrayList<>();
+      Queue<Object> queue = new LinkedList<>();
+      queue.offer(this);
+      Object NULL = new Object();
+      while (!queue.isEmpty()){
+         int size = queue.size();
+          for (int i = 0; i < size; i++) {
+              Object o = queue.poll();
+              if(o == NULL){
+                  list.add(null);
+              }else{
+                  TreeNode node =(TreeNode)o;
+                  list.add(node.val);
+                  if(node.left == null && node.right == null){
+                      continue;
+                  }
+                  queue.offer(node.left != null ? node.left : NULL);
+                  queue.offer(node.right != null ? node.right : NULL);
+              }
+          }
+      }
+      return Arrays.toString(list.toArray());
+    }
 }
